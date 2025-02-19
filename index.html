@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notas em Tempo Real</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            transition: background 0.3s;
+        }
+        textarea {
+            width: 80%;
+            height: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        input[type="color"] {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="homePage">
+        <h1>Escolha uma chave</h1>
+        <input type="text" id="keyInput" placeholder="Digite uma palavra...">
+        <button onclick="redirectToPage()">Acessar</button>
+    </div>
+    
+    <script>
+        function redirectToPage() {
+            const key = document.getElementById("keyInput").value.trim();
+            if (key) {
+                window.location.href = `/${key}`;
+            }
+        }
+    </script>
+</body>
+</html>
