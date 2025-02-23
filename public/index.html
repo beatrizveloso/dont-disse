@@ -15,17 +15,84 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            background-color: #ebc5d4;
             transition: background 0.3s;
         }
-        textarea {
-            width: 80%;
-            height: 300px;
+
+        #homePage {
+            text-align: center;
+        }
+
+        #keyInput {
+            width: 70%;
             padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        #keyInput:focus {
+            border-color: #7a6775;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #7a6775;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
             font-size: 16px;
         }
-        input[type="color"] {
-            margin: 10px;
+
+        button:hover {
+            background-color: #644d5d;
+        }
+
+        #editorContainer {
+            width: 80%;
+            height: 500px;
+            margin-top: 30px;
+            background: white;
+            border: 2px solid #ccc;
+            padding: 10px;
+            overflow: auto;
+        }
+
+        #editor {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            line-height: 1.5;
+            resize: none;
+            white-space: pre-wrap;
+            overflow-y: scroll;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#b6a9b3, #644d5d);
+            border-radius: 12px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7a6775;
+        }
+
+        h1{
+            color: rgb(223, 82, 129);
         }
     </style>
 </head>
@@ -35,12 +102,12 @@
         <input type="text" id="keyInput" placeholder="Digite uma palavra...">
         <button onclick="redirectToPage()">Acessar</button>
     </div>
-    
+
     <script>
         function redirectToPage() {
             const key = document.getElementById("keyInput").value.trim();
             if (key) {
-                window.location.href = `/${key}`;
+                window.location.href = `editor.html?key=${key}`;
             }
         }
     </script>

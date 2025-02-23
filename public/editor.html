@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            transition: background 0.3s;
+        }
+        #editorContainer {
+            position: relative;
+            width: 80%;
+            height: 500px;
+            margin-top: 30px;
+            background: white;
+            border: 2px solid #ccc;
+            padding: 10px;
+            overflow: hidden;
+        }
+        #editor {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            resize: none;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        img {
+            max-width: 100px;
+            max-height: 100px;
+            cursor: grab;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#b6a9b3, #644d5d);
+            border-radius: 12px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7a6775;
+        }
+        
+        h1{
+            color: rgb(223, 82, 129);
+        }
+    </style>
+</head>
+<body>
+    <h1>Cole seu texto aqui</h1>
+    <input type="color" id="colorPicker" onchange="changeBackground()">
+    <div id="editorContainer">
+        <div id="editor" contenteditable="true" onpaste="handlePaste(event)"></div>
+    </div>
+
+    <script>
+
+        const firebaseConfig = {
+            apiKey: "SUA_API_KEY",
+            authDomain: "SEU_DOMINIO.firebaseapp.com",
+            projectId: "SEU_PROJETO_ID",
+            storageBucket: "SEU_BUCKET.appspot.com",
+            messagingSenderId: "SEU_SENDER_ID",
+            appId: "SUA_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const key = urlParams.get("key");
+
+        function changeBackground() {
+            document.body.style.backgroundColor = document.getElementById("colorPicker").value;
+        }
+
+        const noteRef = db.collection("notas").doc(key);
+        const noteEditor = document.getElementById("editor");
+
+        noteRef.onSnapshot((doc) => {
+            if (doc.exists) {
+                noteEditor.innerHTML = doc.data().content;
+            }
+        });
+
+        noteEditor.addEventListener("input", () => {
+            noteRef.set({ content: noteEditor.innerHTML });
+        });
+
+        function handlePaste(event) {
+            event.preventDefault();  // Impede o comportamento padrão de colagem
+
+            const clipboardData = event.clipboardData;
+            const items = clipboardData.items;
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if (item.type.indexOf("image") === 0) {
+                    const blob = item.getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        document.getElementById("editor").appendChild(img);
+                    };
+                    reader.readAsDataURL(blob);
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>
